@@ -72,7 +72,6 @@ def stop_listening():
             print("Stopped listening for claps.")
             return "Stopped"
         return "Not listening"
-
 @app.route('/')
 def index():
     return render_template('index.html')
