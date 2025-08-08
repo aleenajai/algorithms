@@ -1,0 +1,173 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClapControl | Media Control with Hand Claps</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        .clap-animation {
+            animation: pulse 0.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .visualizer {
+            height: 150px;
+            background: linear-gradient(135deg, #4f46e5 0%, #881337 100%);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .btn-floating {
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-floating:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <header class="text-center mb-16">
+            <div class="w-24 h-24 bg-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15.536a3 3 0 110-4.072" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-3">ClapControl</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Transform your claps into media commands! Control your music and videos with intuitive hand claps.
+            </p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="flex flex-col lg:flex-row gap-8 items-center">
+            <!-- Visualizer Panel -->
+            <div class="lg:w-1/2 bg-white rounded-3xl p-8 shadow-xl">
+                <div class="visualizer mb-6 flex items-end" id="audioVisualizer">
+                    <div class="bar bg-white opacity-80 rounded-t-md mx-1 w-2 h-10" id="bar1"></div>
+                    <div class="bar bg-white opacity-80 rounded-t-md mx-1 w-2 h-16" id="bar2"></div>
+                    <div class="bar bg-white opacity-80 rounded-t-md mx-1 w-2 h-24" id="bar3"></div>
+                    <div class="bar bg-white opacity-80 rounded-t-md mx-1 w-2 h-32" id="bar4"></div>
+                    <div class="bar bg-white opacity-80 rounded-t-md mx-1 w-2 h-40" id="bar5"></div>
+                </div>
+                
+                <div class="text-center mb-8">
+                    <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium mb-4" id="statusDisplay">Microphone stopped</div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3" id="commandName">Commands</h2>
+                    <p class="text-gray-600" id="commandDetail">Clap once for Play/Pause, twice for Mute/Unmute</p>
+                </div>
+
+                <!-- Clap Indicator -->
+                <div class="flex justify-center mb-6">
+                    <div class="relative">
+                        <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="clapIcon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636L12 12m0 0l-6.364 6.364M12 12V4" />
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 rounded-full border-4 border-indigo-200 opacity-0" id="rippleEffect"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-3xl p-8 shadow-xl">
+                    <div class="flex justify-between items-center mb-8">
+                        <h2 class="text-xl font-bold text-gray-800">Control Panel</h2>
+                        <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium" id="connectionStatus">Inactive</span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sensitivity</label>
+                            <input type="range" min="1" max="5" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" id="sensitivityControl">
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Low</span>
+                                <span>Medium</span>
+                                <span>High</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="startBtn" class="btn-floating bg-indigo-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center">
+                                Start
+                            </button>
+                            <button id="stopBtn" class="btn-floating bg-gray-200 text-gray-800 py-3 px-6 rounded-lg font-medium flex items-center justify-center" disabled>
+                                Stop
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Note -->
+                <div class="text-center mt-6 text-xs text-gray-500">
+                    <p>Make sure your microphone has permission and background noise is minimal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const statusDisplay = document.getElementById('statusDisplay');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const commandName = document.getElementById('commandName');
+        const commandDetail = document.getElementById('commandDetail');
+        const sensitivityControl = document.getElementById('sensitivityControl');
+
+        startBtn.addEventListener('click', async () => {
+            const response = await fetch('/control', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=start'
+            });
+            const status = await response.text();
+            console.log("Backend response (start):", status);
+            if (status === "Listening") {
+                statusDisplay.textContent = "Listening for claps...";
+                connectionStatus.textContent = "Active";
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            }
+        });
+
+        stopBtn.addEventListener('click', async () => {
+            const response = await fetch('/control', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=stop'
+            });
+            const status = await response.text();
+            console.log("Backend response (stop):", status);
+            if (status === "Stopped") {
+                statusDisplay.textContent = "Microphone stopped.";
+                connectionStatus.textContent = "Inactive";
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        });
+
+        sensitivityControl.addEventListener('input', (e) => {
+            console.log("Sensitivity set to:", e.target.value);
+        });
+    </script>
+</body>
+</html>

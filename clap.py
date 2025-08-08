@@ -1,15 +1,26 @@
+# clap.py
+from flask import Flask, render_template, request
 import sounddevice as sd
 import numpy as np
 import pyautogui
 import time
+import threading
 
-THRESHOLD_MULTIPLIER = 3.0      # How much louder than background noise a clap must be
-DOUBLE_CLAP_TIME = 0.5          # Max time gap between claps for double clap
-BACKGROUND_UPDATE_RATE = 0.1    # How often to update background noise (seconds)
+app = Flask(__name__)
+
+# Clap detection settings
+THRESHOLD_MULTIPLIER = 3.0
+DOUBLE_CLAP_TIME = 0.5
+BACKGROUND_UPDATE_RATE = 0.1
 
 last_clap_time = 0
 clap_count = 0
 background_noise = 0.05  # Starting guess
+listening = False  # Flag to control listening
+stream = None      # Sound stream object
+
+# Lock for thread-safe access to global variables
+lock = threading.Lock()
 
 def clap_detect(indata, frames, time_info, status):
     global last_clap_time, clap_count, background_noise
@@ -40,8 +51,42 @@ def clap_detect(indata, frames, time_info, status):
             print("👏👏 Double clap: Mute/Unmute toggled.")
             clap_count = 0
 
-with sd.InputStream(callback=clap_detect):
-    print("Listening for claps... Single clap = Pause/Play, Double clap = Mute/Unmute")
-    while True:
-        pass
-    
+def start_listening():
+    global listening, stream
+    with lock:
+        if not listening:
+            listening = True
+            stream = sd.InputStream(callback=clap_detect)
+            stream.start()
+            print("Started listening for claps...")
+            return "Listening"
+        return "Already listening"
+
+def stop_listening():
+    global listening, stream
+    with lock:
+        if listening and stream:
+            stream.stop()
+            stream.close()
+            listening = False
+            print("Stopped listening for claps.")
+            return "Stopped"
+        return "Not listening"
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/control', methods=['POST'])
+def control():
+    action = request.form.get('action')
+    if action == "start":
+        status = start_listening()
+    elif action == "stop":
+        status = stop_listening()
+    else:
+        status = "Invalid action"
+    return status  # Return status to the frontend
+
+if __name__ == '__main__':
+    app.run(debug=True)
