@@ -35,11 +35,15 @@ Project Documentation
 For Software:
 
 Screenshots
-![https://drive.google.com/file/d/1sI0BlXhgrR3-qxs9ZVoA0ORkwcRmk5lr/view?usp=drive_link](screenshot1.png) - showing frond end code
-![https://drive.google.com/file/d/1key1L2BV2nOcuFxNQ1QzQfejG_8rLhqx/view?usp=drive_link](screenshot2.png) - showing back end code
-![https://drive.google.com/file/d/1fS8rwRjPvBepm4nvw1aESzuiUhCsYHn4/view?usp=drive_link](screenshot2.png) - showing frond end website
+![https://drive.google.com/file/d/1sI0BlXhgrR3-qxs9ZVoA0ORkwcRmk5lr/view?usp=drive_link]<img width="1920" height="1200" alt="Screenshot 2025-08-09 050917" src="https://github.com/user-attachments/assets/711a9915-8cc9-4152-8fac-f5740d167f7e" />
+ - showing frond end code
+![https://drive.google.com/file/d/1key1L2BV2nOcuFxNQ1QzQfejG_8rLhqx/view?usp=drive_link](screenshot2.png)<img width="1920" height="1200" alt="Screenshot 2025-08-09 050904" src="https://github.com/user-attachments/assets/0e7abef0-9012-4436-b7dc-edd2869a1790" />
+ - showing back end code
+![https://drive.google.com/file/d/1fS8rwRjPvBepm4nvw1aESzuiUhCsYHn4/view?usp=drive_link](screenshot2.png)![screenshot,png](https://github.com/user-attachments/assets/dae7acc4-f99c-4df9-891b-1ab04b556352)
+ - showing frond end website
 Diagrams
-![https://drive.google.com/file/d/1FQVpKXXRd7ucB5JBkuJKb4DpS3D-9hVR/view?usp=sharing](workflow.png) - Workflow: Clap -> Sound Detected -> Volume Analyzed -> Action Triggered -> pyautogui key press
+![https://drive.google.com/file/d/1FQVpKXXRd7ucB5JBkuJKb4DpS3D-9hVR/view?usp=sharing](workflow.png)<img width="307" height="768" alt="clapcontrol_workflow" src="https://github.com/user-attachments/assets/f3c12151-fe48-42b4-8e22-55fdede12a8b" />
+ - Workflow: Clap -> Sound Detected -> Volume Analyzed -> Action Triggered -> pyautogui key press
 
 
 Made with ❤ at TinkerHub Useless Projects
